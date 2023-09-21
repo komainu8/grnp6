@@ -1,0 +1,43 @@
+# Copyright (C) 2023  Horimoto Yasuhiro <horimoto@clear-code.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+name: Test
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: "hoge"
+    strategy:
+      fail-fast: false
+      matrix:
+        raku-version:
+          - "2023.08-01"
+        runs-on:
+          - ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - name: Install Raku
+        run: |
+          wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
+          tar -zxf rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
+      - name: Install Groonga
+        run: |
+          sudo -H add-apt-repository -y ppa:groonga/ppa
+          sudo -H apt update
+          sudo -H apt install -y -V --no-install-recommends \
+            libgroonga-dev \
+            pkg-config
