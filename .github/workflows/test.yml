@@ -1,0 +1,43 @@
+# Copyright (C) 2023  Horimoto Yasuhiro <horimoto@clear-code.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+name: Test
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: Test
+    strategy:
+      fail-fast: false
+      matrix:
+        raku-version:
+          - "2023.08-01"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up virtualization
+        run: |
+          sudo apt update -y
+          sudo apt install -y -V libvirt-daemon
+          sudo systemctl enable libvirtd
+          sudo systemctl start libvirtd
+          sudo apt install -y -V qemu-kvm
+      - name: Install Raku
+        run: |
+          wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
+          tar -zxf rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
+          mv rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc rakudo
+          ./rakudo/bin/raku --version
