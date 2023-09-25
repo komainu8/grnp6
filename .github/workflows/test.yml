@@ -31,10 +31,10 @@ jobs:
       - name: Set up virtualization
         run: |
           sudo apt update -y
-          sudo apt install -y -V libvirt-daemon
+          sudo apt install -y -V libvirt-daemon-system libvirt-clients
+          sudo apt install -y -V qemu-kvm
           sudo systemctl enable libvirtd
           sudo systemctl start libvirtd
-          sudo apt install -y -V qemu-kvm
       - name: Install Raku
         run: |
           wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
