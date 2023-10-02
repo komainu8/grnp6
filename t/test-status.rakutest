@@ -1,0 +1,9 @@
+use Test;
+use lib 'grnp6'
+
+plan 1;
+
+my $grnp6 = GrnP6.new();
+is $grnp6.version, "0.0.1"
+
+done-testing;
