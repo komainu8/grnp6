@@ -37,6 +37,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: canonical/setup-lxd@v0.1.1
+      - name: Install dependency packages
+        run: |
+          sudo apt install -y -V \
+            qemu-user-static
       - name: Download Raku
         run: |
            wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
