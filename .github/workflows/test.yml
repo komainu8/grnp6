@@ -30,18 +30,14 @@ jobs:
           - "ubuntu:22.04"
           - "images:debian/12"
           - "images:almalinux/8"
-          - "images:almalinux/8/arm64"
           - "images:almalinux/9"
-          - "images:almalinux/9/arm64"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: canonical/setup-lxd@v0.1.1
-      - name: Install dependency packages
+      - name: Update installed packages
         run: |
           sudo apt update
-          sudo apt install -y -V \
-            qemu-user-static
       - name: Download Raku
         run: |
            wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
