@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: canonical/setup-lxd@v0.1.1
-      - name: Set up virtualization
+      - name: Run tests
         run: |
           set -x
           sudo apt update -y
