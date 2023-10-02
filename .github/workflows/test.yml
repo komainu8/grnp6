@@ -37,14 +37,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: canonical/setup-lxd@v0.1.1
+      - name: Download Raku
+        run: |
+           wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
+           tar -zxf rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
+           mv rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc rakudo
       - name: Run tests
         run: |
           set -x
-          sudo apt update -y
-          sudo apt upgrade -y
           lxc launch ${{ matrix.image }} target
           lxc config device add target host disk source=$PWD path=/host
-          lxc exec target -- /host/t/setup.sh ${{ matrix.raku-version }}
+          lxc exec target -- /host/t/setup.sh
           lxc exec target -- /host/t/run-tests.sh
           lxc stop target
           lxc delete target
