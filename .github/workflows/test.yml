@@ -39,6 +39,7 @@ jobs:
       - uses: canonical/setup-lxd@v0.1.1
       - name: Install dependency packages
         run: |
+          sudo apt update
           sudo apt install -y -V \
             qemu-user-static
       - name: Download Raku
