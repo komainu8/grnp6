@@ -35,14 +35,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: canonical/setup-lxd@v0.1.1
-      - name: Update installed packages
+      - name: Install required packages for building Star Bundle
         run: |
           sudo apt update
-      - name: Download Raku
+          sudo apt install -y -V build-essential git libssl-dev
+      - name: Build Star Bundle
         run: |
-           wget https://rakudo.org/dl/rakudo/rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
-           tar -zxf rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc.tar.gz
-           mv rakudo-moar-${{ matrix.raku-version }}-linux-x86_64-gcc rakudo
+          mkdir rakudo
+          pushd rakudo
+          curl -LJO https://rakudo.org/latest/star/src
+          tar -xzf rakudo-star-*.tar.gz
+          mv rakudo-star-*/* .
+          rm -fr rakudo-star-*
+          ./bin/rstar install
+          echo "export PATH=$(pwd)/bin:$(pwd)/share/perl6/site/bin:$(pwd)/share/perl6/vendor/bin:$(pwd)/share/perl6/core/bin:\$PATH" >> ~/.bashrc
+          source ~/.bashrc
+          rstar test
       - name: Run tests
         run: |
           set -x
