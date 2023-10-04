@@ -3,5 +3,5 @@
 set -xue
 
 echo "Run tests!"
-prove6 --lib t/
+../rakudo/bin/prove6 --lib t/
 
