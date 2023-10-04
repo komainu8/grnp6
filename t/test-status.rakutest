@@ -1,9 +1,11 @@
 use Test;
-use lib 'grnp6'
+use lib 'lib'
+
+my $version = "../version".IO.slurp;
 
 plan 1;
 
 my $grnp6 = GrnP6.new();
-is $grnp6.version, "0.0.1"
+is $grnp6.version, $version
 
 done-testing;
