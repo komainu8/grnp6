@@ -49,6 +49,7 @@ jobs:
           rm -fr rakudo-star-*
           ./bin/rstar install
           ./bin/rstar test
+          popd
       - name: Run tests
         run: |
           set -x
