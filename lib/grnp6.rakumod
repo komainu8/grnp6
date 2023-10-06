@@ -18,6 +18,8 @@ use NativeCall;
 
 constant LIBPATH = "/usr/lib/groonga/groonga";
 sub grn_init() returns int32 is native(LIBPATH) { * }
+sub grn_fin() returns int32 is native(LIBPATH) { * }
+
 class Grnp6 {
   my Str $.version = "0.0.1";
 
@@ -26,5 +28,9 @@ class Grnp6 {
     if $rc != 0 {
       die "Failed initialize Groonga!";
     }
+  }
+
+  submethod DESTROY {
+    grn_fin();
   }
 }
