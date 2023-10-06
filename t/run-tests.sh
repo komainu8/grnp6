@@ -2,7 +2,7 @@
 
 set -xue
 
-pwe
+pwd
 ls -al
 
 echo "Run tests!"
