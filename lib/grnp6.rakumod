@@ -14,6 +14,9 @@
 # License along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
+use NativeCall;
+
+constant LIBPATH = "/usr/lib/groonga/groonga";
 class Grnp6 {
   my Str $.version = "0.0.1";
 }
