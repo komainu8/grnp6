@@ -15,13 +15,13 @@
 # <http://www.gnu.org/licenses/>.
 
 use Test;
-use lib 'lib'
+use lib 'lib';
 
 my $version = "../version".IO.slurp;
 
 plan 1;
 
 my $grnp6 = GrnP6.new();
-is $grnp6.version, $version
+is $grnp6.version, $version;
 
 done-testing;
