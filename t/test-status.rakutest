@@ -16,6 +16,7 @@
 
 use Test;
 use lib 'lib';
+use grnp6;
 
 my $version = "../version".IO.slurp;
 
