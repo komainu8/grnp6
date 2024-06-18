@@ -35,7 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: canonical/setup-lxd@v0.1.1
       - name: Install required packages for building Star Bundle
         run: |
           sudo apt update
@@ -47,15 +46,32 @@ jobs:
           curl -LJO https://rakudo.org/latest/star/src
           tar -xzf rakudo-star-*.tar.gz
           mv rakudo-star-*/* .
-          rm -fr rakudo-star-*
+          rm -rf rakudo-star-*
           ./bin/rstar install
           popd
+      - name: Install Incus
+        run: |
+          sudo apt install -y -V incus
+      - name: Allow egress network traffic flows for Incus
+        # https://linuxcontainers.org/incus/docs/main/howto/network_bridge_firewalld/#prevent-connectivity-issues-with-incus-and-docker
+        run: |
+          sudo iptables -I DOCKER-USER -i incusbr0 -j ACCEPT
+          sudo iptables -I DOCKER-USER -o incusbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
       - name: Run tests
         run: |
           set -x
-          lxc launch ${{ matrix.image }} target
-          lxc config device add target host disk source=$PWD path=/host
-          lxc exec target -- /host/t/setup.sh
-          lxc exec target -- /host/t/run-tests.sh
-          lxc stop target
-          lxc delete target
+          sudo incus admin init --auto
+          sudo incus launch ${{ matrix.image }} target
+          ls -al $PWD
+          sudo incus config device add target host disk source=$PWD path=/host
+          sleep 10
+      - name: Run tests
+        run: |
+          sudo incus exec target \
+            -- \
+            /host/t/setup.sh
+            /host/t/run-tests.sh
+      - name: Remove container
+        run: |
+          sudo incus stop target
+          sudo incus delete target
