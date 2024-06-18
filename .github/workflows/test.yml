@@ -27,7 +27,8 @@ jobs:
         raku-version:
           - "2023.08-01"
         image:
-          - "ubuntu:22.04"
+          - "images:ubuntu/24.04"
+          - "images:ubuntu/22.04"
           - "images:debian/12"
           - "images:almalinux/8"
           - "images:almalinux/9"
